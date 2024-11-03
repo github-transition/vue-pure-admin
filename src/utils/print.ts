@@ -16,7 +16,9 @@ const Print = function (dom, options?: object): PrintFunction {
     // Callback before printing
     printBeforeFn: null,
     // Callback after printing
-    printDoneCallBack: null
+    printDoneCallBack: null,
+    // Whether to show default print header and footer
+    showHeaderFooter: true
   };
   for (const key in this.conf) {
     if (key && options.hasOwnProperty(key)) {
@@ -62,7 +64,11 @@ Print.prototype = {
     for (let i = 0; i < styles.length; i++) {
       str += styles[i].outerHTML;
     }
-    str += `<style>.no-print{display:none;}${this.conf.styleStr}</style>`;
+    str += `<style>.no-print{display:none;}${this.conf.styleStr}`;
+    if (!this.conf.showHeaderFooter) {
+      str += `@media print { @page { margin: 0mm; size: auto; } }`;
+    }
+    str += `</style>`;
     return str;
   },
   // form assignment
